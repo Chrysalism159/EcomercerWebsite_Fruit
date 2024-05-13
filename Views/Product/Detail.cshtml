@@ -1,0 +1,143 @@
+﻿@using EcomercerWebsite_Fruit.DataTransferObject
+@model EcomercerWebsite_Fruit.DataTransferObject.ProductDTO
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var relatedProducts = ViewBag.relatedProducts as List<ProductDTO>;
+}
+
+<!-- Start All Title Box -->
+<div class="all-title-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Shop Detail</h2>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active">Shop Detail </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End All Title Box -->
+<!-- Start Shop Detail  -->
+<div class="shop-detail-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-5 col-lg-5 col-md-6">
+                <div id="carousel-example-1" class="single-product-slider carousel slide">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active"> <img class="d-block w-100" src="~/images/FruitImages/@Model.ProductImage"> </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-7 col-lg-7 col-md-6">
+                <div class="single-product-details">
+                    <h2>@Model.ProductName</h2>
+                    <h5>@Model.ProductCost</h5>
+                    @* <p class="available-stock"><span> More than 20 available / <a href="#">8 sold </a></span><p> *@
+                        <h4>Short Description:</h4>
+                    <p>@Model.ProductDescription</p>
+                    <ul>
+                        <li>
+                            <div class="form-group quantity-box">
+                                <label class="control-label">Quantity</label>
+                                <input class="form-control" value="0" min="0" max="20" type="number">
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="price-box-bar">
+                        <div class="cart-and-bay-btn">
+                            <a class="btn hvr-hover" data-fancybox-close="" href="#">Buy New</a>
+                            <a class="btn hvr-hover" data-fancybox-close="" href="#">Add to cart</a>
+                        </div>
+                    </div>
+
+                    <div class="add-to-btn">
+                        <div class="add-comp">
+                            <a class="btn hvr-hover" href="#"><i class="fas fa-heart"></i> Add to wishlist</a>
+                        </div>
+                        <div class="share-bar">
+                            <a class="btn hvr-hover" href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                            <a class="btn hvr-hover" href="#"><i class="fab fa-google-plus" aria-hidden="true"></i></a>
+                            <a class="btn hvr-hover" href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                            <a class="btn hvr-hover" href="#"><i class="fab fa-pinterest-p" aria-hidden="true"></i></a>
+                            <a class="btn hvr-hover" href="#"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-5">
+            <div class="card card-outline-secondary my-4">
+                <div class="card-header">
+                    <h2>Product Reviews</h2>
+                </div>
+                <div class="card-body">
+                    <div class="col-lg-12">
+                        <div class="border-bottom rounded my-4">
+                            <textarea name="" id="" class="form-control border-0" cols="30" rows="8" placeholder="Your Review *" spellcheck="false"></textarea>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-lg-12">
+                        <div class="d-flex justify-content-between py-3 mb-5">
+                            <div class="d-flex align-items-center">
+                                <p class="mb-0 me-3">Please rate:</p>
+                                <div class="d-flex align-items-center" style="font-size: 12px;">
+                                    <i class="fa fa-star text-muted"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                            </div>
+                            <a href="#" class="btn hvr-hover">Leave a Review</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-5">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1>Featured Products</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+                </div>
+                <div class="featured-products-box owl-carousel owl-theme">
+                    @foreach(var item in relatedProducts)
+                    {
+                        <div class="item">
+                        <div class="products-single fix">
+                            <div class="box-img-hover">
+                                    <img src="~/images/FruitImages/@item.ProductImage" class="img-fluid" alt="Image">
+                                <div class="mask-icon">
+                                    <ul>
+                                        <li><a asp-action="Detail" asp-controller="Product" asp-route-id="@item.ProductID" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                        <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                        <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                    </ul>
+                                    <a class="cart" href="#">Add to Cart</a>
+                                </div>
+                            </div>
+                            <div class="why-text">
+                                <h4>@item.ProductName</h4>
+                                <h5>@item.ProductCost .VND</h5>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- End Cart -->
+
