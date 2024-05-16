@@ -89,23 +89,23 @@ namespace EcomercerWebsite_Fruit.Controllers
                     var customer = new Customer();
                     if (model.LikeAccount)
                         customer = _context.customers.SingleOrDefault(p => p.CustomerID.Equals(customerId));
-                    //var bill = new Bill
-                    //{
-                    //    CustomerID = customer.CustomerID,
-                    //    DayBuy = DateTime.Now,
+                    var bill = new Bill
+                    {
+                        CustomerID = customer.CustomerID,
+                        DayBuy = DateTime.Now,
 
-                    //    DayDelivery = DateTime.Now,
+                        DayDelivery = DateTime.Now,
 
-                    //    CustomerName
+                        CustomerName = customer.CustomerName,
 
-                    //    CustomerAddress
+                        CustomerAddress = customer.CustomerAddress,
 
-                    //    PaymentMethod
+                        PaymentMethod = "COD",
 
-                    //    WayDelivery
+                        WayDelivery = "J&T EXPRESS",
 
-                    //    DeliveryFee
-                    //};
+                        DeliveryFee = 0
+                    };
                 }
             }
             return View(cart);
