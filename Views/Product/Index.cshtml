@@ -65,7 +65,7 @@
                                                             <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
                                                             <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
                                                         </ul>
-                                                        <a class="cart" href="#">Add to Cart</a>
+                                                        <a class="cart" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductID">Add to Cart</a>
                                                     </div>
                                                 </div>
                                                 <div class="why-text">
@@ -85,10 +85,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="owl-nav">
+                    
+                </div>
                 <div class="pagination d-flex justify-content-center mt-5">
-                    <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex - 1)" class="btn hvr-hover">&laquo;</a>
+                    <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex - 1)" class="btn hvr-hover"><i class="fas fa-arrow-left"></i></a>
+                    <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex + 1)" class="btn hvr-hover"><i class="fas fa-arrow-right"></i></a>
+                    @* <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex - 1)" class="btn hvr-hover">&laquo;</a>
 
-                    <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex + 1)" class="btn hvr-hover">&raquo;</a>
+                    <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex + 1)" class="btn hvr-hover">&raquo;</a> *@
                 </div>
             </div>
 

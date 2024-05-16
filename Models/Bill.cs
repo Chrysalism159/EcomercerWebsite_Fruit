@@ -12,8 +12,6 @@ namespace EcomercerWebsite_Fruit.Models
 
         public DateTime DayBuy { get; set; }
 
-        public DateTime? DayNeed { get; set; }
-
         public DateTime? DayDelivery { get; set; }
 
         public string? CustomerName { get; set; }
@@ -39,5 +37,10 @@ namespace EcomercerWebsite_Fruit.Models
         //public virtual NhanVien? MaNvNavigation { get; set; }
         [NotMapped]
         public virtual StatementInformation StatementInformationNavigation { get; set; } = null!;
+
+        //public static implicit operator Bill(Bill v)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
