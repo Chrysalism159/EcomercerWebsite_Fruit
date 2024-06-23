@@ -5,7 +5,7 @@ namespace EcomercerWebsite_Fruit.Models
     public class Provider
     {
         [Key]
-        public Guid ProviderID { get; set; }
+        public string ProviderID { get; set; }
 
         public string ProviderName { get; set; } = null!;
 

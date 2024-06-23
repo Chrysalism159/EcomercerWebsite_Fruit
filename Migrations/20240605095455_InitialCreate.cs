@@ -15,7 +15,7 @@ namespace EcomercerWebsite_Fruit.Migrations
                 name: "customers",
                 columns: table => new
                 {
-                    CustomerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CustomerPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerGender = table.Column<bool>(type: "bit", nullable: false),
@@ -37,7 +37,7 @@ namespace EcomercerWebsite_Fruit.Migrations
                 name: "productTypes",
                 columns: table => new
                 {
-                    ProductTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductTypeID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductTypeDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -50,7 +50,7 @@ namespace EcomercerWebsite_Fruit.Migrations
                 name: "providers",
                 columns: table => new
                 {
-                    ProviderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProviderID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Logo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProviderContact = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -65,25 +65,25 @@ namespace EcomercerWebsite_Fruit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "statementInformation",
+                name: "statementInformations",
                 columns: table => new
                 {
-                    StatementID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StatementID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StatementName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StatementDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_statementInformation", x => x.StatementID);
+                    table.PrimaryKey("PK_statementInformations", x => x.StatementID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "products",
                 columns: table => new
                 {
-                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductTypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductTypeID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductUnit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductCost = table.Column<double>(type: "float", nullable: true),
                     ProductImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -91,7 +91,7 @@ namespace EcomercerWebsite_Fruit.Migrations
                     ProductDiscount = table.Column<double>(type: "float", nullable: false),
                     ProductNumberAccess = table.Column<int>(type: "int", nullable: false),
                     ProductDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProviderID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ProviderID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,19 +114,17 @@ namespace EcomercerWebsite_Fruit.Migrations
                 name: "bills",
                 columns: table => new
                 {
-                    BillID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BillID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CustomerID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     DayBuy = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DayNeed = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DayDelivery = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WayDelivery = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DeliveryFee = table.Column<double>(type: "float", nullable: false),
-                    StatementID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                    ///StatementInformationStatementID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatementInformationStatementID = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -135,12 +133,11 @@ namespace EcomercerWebsite_Fruit.Migrations
                         name: "FK_bills_customers_CustomerID",
                         column: x => x.CustomerID,
                         principalTable: "customers",
-                        principalColumn: "CustomerID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CustomerID");
                     table.ForeignKey(
-                        name: "FK_bills_statementInformation_StatementInformationStatementID",
-                        column: x => x.StatementID,
-                        principalTable: "statementInformation",
+                        name: "FK_bills_statementInformations_StatementInformationStatementID",
+                        column: x => x.StatementInformationStatementID,
+                        principalTable: "statementInformations",
                         principalColumn: "StatementID");
                 });
 
@@ -148,9 +145,9 @@ namespace EcomercerWebsite_Fruit.Migrations
                 name: "favorites",
                 columns: table => new
                 {
-                    FavoriteID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FavoriteID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CustomerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PickDay = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FavoriteDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -175,11 +172,10 @@ namespace EcomercerWebsite_Fruit.Migrations
                 name: "billInformation",
                 columns: table => new
                 {
-                    BillInformationID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BillID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BillInformationID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BillID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductCost = table.Column<double>(type: "float", nullable: false),
-                    BillInformationNumber = table.Column<int>(type: "int", nullable: false),
                     BillInformationDiscount = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
@@ -215,9 +211,9 @@ namespace EcomercerWebsite_Fruit.Migrations
                 column: "CustomerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_bills_StatementID",
+                name: "IX_bills_StatementInformationStatementID",
                 table: "bills",
-                column: "StatementID");
+                column: "StatementInformationStatementID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_favorites_CustomerID",
@@ -259,7 +255,7 @@ namespace EcomercerWebsite_Fruit.Migrations
                 name: "customers");
 
             migrationBuilder.DropTable(
-                name: "statementInformation");
+                name: "statementInformations");
 
             migrationBuilder.DropTable(
                 name: "productTypes");

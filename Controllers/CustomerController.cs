@@ -29,7 +29,7 @@ namespace EcomercerWebsite_Fruit.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(CustomerDTO model, IFormFile imagesFile)
         {
-            model.CustomerID = Guid.NewGuid();
+            model.CustomerID = Guid.NewGuid().ToString();
             if(ModelState.IsValid)
             {
                 try
@@ -85,6 +85,7 @@ namespace EcomercerWebsite_Fruit.Controllers
                                 var claims = new List<Claim> {
                                 new Claim(ClaimTypes.Email, data.CustomerEmail),
                                 new Claim(ClaimTypes.Name, data.CustomerName),
+                                new Claim(StaticValueService.CLAIM_CUSTOMERID, data.CustomerID.ToString()),
 
 								//claim - role động
 								new Claim(ClaimTypes.Role, "Customer")

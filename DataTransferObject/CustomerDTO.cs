@@ -2,7 +2,7 @@
 {
     public class CustomerDTO
     {
-        public Guid CustomerID { get; set; }
+        public string? CustomerID { get; set; }
 
         public string? CustomerPassword { get; set; }
 

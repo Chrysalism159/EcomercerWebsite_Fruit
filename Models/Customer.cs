@@ -6,7 +6,7 @@ namespace EcomercerWebsite_Fruit.Models
     public class Customer
     {
         [Key]
-        public Guid CustomerID { get; set; }
+        public string CustomerID { get; set; }
 
         public string? CustomerPassword { get; set; }
 

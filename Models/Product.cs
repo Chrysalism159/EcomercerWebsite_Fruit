@@ -6,13 +6,13 @@ namespace EcomercerWebsite_Fruit.Models
     public class Product
     {
         [Key]
-        public Guid ProductID { get; set; }
+        public string? ProductID { get; set; }
 
         public string ProductName { get; set; } = null!;
 
         //public string? TenAlias { get; set; }
 
-        public Guid ProductTypeID { get; set; }
+        public string ProductTypeID { get; set; }
 
         public string? ProductUnit { get; set; }
 
@@ -28,7 +28,7 @@ namespace EcomercerWebsite_Fruit.Models
 
         public string? ProductDescription { get; set; }
 
-        public Guid ProviderID { get; set; }
+        public string ProviderID { get; set; }
         //public virtual ICollection<BanBe> BanBes { get; set; } = new List<BanBe>();
 
         public virtual ICollection<BillInformation> BillInformations { get; set; } = new List<BillInformation>();

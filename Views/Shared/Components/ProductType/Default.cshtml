@@ -7,7 +7,7 @@
         @foreach(var item in Model)
         {
             <div class="list-group-collapse sub-men">
-            <a class="list-group-item list-group-item-action" asp-action="Index" asp-controller="Cart" asp-route-type ="@item.ProductTypeID" aria-controls="sub-men1">
+            <a class="list-group-item list-group-item-action" asp-action="Index" asp-controller="Product" asp-route-type ="@item.ProductTypeID" aria-controls="sub-men1">
                 @item.ProductTypeName <small class="text-muted">(@item.ProductAmount)</small>
             </a>
             

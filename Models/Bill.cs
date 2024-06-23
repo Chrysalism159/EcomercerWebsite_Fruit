@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EcomercerWebsite_Fruit.Services;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EcomercerWebsite_Fruit.Models
@@ -6,9 +7,9 @@ namespace EcomercerWebsite_Fruit.Models
     public class Bill
     {
         [Key]
-        public Guid BillID { get; set; }
+        public string BillID { get; set; }
 
-        public Guid CustomerID { get; set; }
+        public string? CustomerID { get; set; }
 
         public DateTime DayBuy { get; set; }
 
@@ -23,8 +24,8 @@ namespace EcomercerWebsite_Fruit.Models
         public string WayDelivery { get; set; } = null!;
 
         public double DeliveryFee { get; set; }
-
-        public Guid StatementID { get; set; }
+        [NotMapped]
+        public DeliveryStatement? deliveryStatement { get; set; }
 
         //public string? MaNv { get; set; }
 

@@ -197,19 +197,11 @@
         <!-- End Navigation -->
     </header>
     <!-- End Main Top -->
-    <!-- Start Top Search -->
-    <div class="top-search">
-        <div class="container">
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Search">
-                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
-            </div>
-        </div>
-    </div>
-    <!-- End Top Search -->
+   @await Html.PartialAsync("_Search")
+ 
+        @RenderBody()
+
     
-    @RenderBody()
 
     @await Html.PartialAsync("_Footer")
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
@@ -220,6 +212,21 @@
                 window.location.href = url;
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const navItems = document.querySelectorAll('.nav-item');
+            // debugger
+            navItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Remove 'active' class from all nav-items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+
+                    // Add 'active' class to the clicked nav-item
+                    this.classList.add('active');
+                });
+            });
+        });
+
     </script>
 
     <!-- ALL JS FILES -->

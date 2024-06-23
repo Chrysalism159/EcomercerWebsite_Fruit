@@ -17,11 +17,11 @@ namespace EcomercerWebsite_Fruit.Controllers
             _context = context;
             _map = map;
         }
-        public IActionResult Index(Guid? type, int? page)
+        public IActionResult Index(string? type, int? page)
         {
             var productList = _context.products.AsQueryable();
             int pagenumber = (page ?? 1);
-            if (type.HasValue)
+            if (type != null)
             {
                 productList = productList.Where(h => h.ProductTypeID == type);
             }
@@ -41,10 +41,10 @@ namespace EcomercerWebsite_Fruit.Controllers
             ViewBag.type = type;
             return View(PaginatedListServices<ProductDTO>.CreateAsync(data.AsNoTracking(), page ?? 1, pageSize));
         }
-        public IActionResult Detail(Guid id)
+        public IActionResult Detail(string id)
         {
              
-            if(id != Guid.Empty)
+            if(id != null)
             {
                 var data = _context.products.SingleOrDefault(h => h.ProductID.Equals( id));
                 if(data == null)

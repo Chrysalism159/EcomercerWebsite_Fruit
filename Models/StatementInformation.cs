@@ -5,7 +5,7 @@ namespace EcomercerWebsite_Fruit.Models
     public class StatementInformation
     {
         [Key]
-        public Guid StatementID { get; set; }
+        public string StatementID { get; set; }
 
         public string StatementName { get; set; } = null!;
 

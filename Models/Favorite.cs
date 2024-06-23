@@ -5,11 +5,11 @@ namespace EcomercerWebsite_Fruit.Models
     public class Favorite
     {
         [Key]
-        public Guid FavoriteID { get; set; }
+        public string FavoriteID { get; set; }
 
-        public Guid ProductID { get; set; }
+        public string ProductID { get; set; }
 
-        public Guid CustomerID { get; set; }
+        public string CustomerID { get; set; }
 
         public DateTime? PickDay { get; set; }
 

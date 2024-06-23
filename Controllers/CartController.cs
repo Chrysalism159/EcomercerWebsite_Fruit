@@ -11,31 +11,38 @@ namespace EcomercerWebsite_Fruit.Controllers
     {
         private readonly EcomercerDataContext _context;
 
-        public CartController(EcomercerDataContext context) 
+        public CartController(EcomercerDataContext context)
         {
             _context = context;
         }
-        public List<CartDTO> cart => HttpContext.Session.Get<List<CartDTO>>(StaticValueService.Cart_Key) ?? new List<CartDTO>(); 
+        public List<CartDTO> cart => HttpContext.Session.Get<List<CartDTO>>(StaticValueService.Cart_Key) ?? new List<CartDTO>();
         public IActionResult Index()
         {
             double total = 0;
             total = cart.Sum(m => m.Total);
+            ViewBag.ShippingFee = 0;
             ViewBag.total = total;
             return View(cart);
         }
-        
-        public IActionResult AddToCart(Guid id)
+        string BillID;
+        double ShippingFee = 0;
+        public IActionResult UpdateShippingFee(double value)
+        {
+            ShippingFee = value;
+            return RedirectToAction("Index");
+        }
+        public IActionResult AddToCart(string id)
         {
             var shopbag = cart;
-            var product = shopbag.SingleOrDefault(m=>m.ProductID.Equals(id));
-            if(product != null)
+            var product = shopbag.SingleOrDefault(m => m.ProductID.Equals(id));
+            if (product != null)
             {
                 product.ProductAmount++;
             }
             else
             {
                 var data = _context.products.SingleOrDefault(m => m.ProductID.Equals(id));
-                if(data == null)
+                if (data == null)
                 {
                     TempData["Message"] = $"Không thấy sản phẩm có mã {id}";
                     return Redirect("/404");
@@ -53,7 +60,7 @@ namespace EcomercerWebsite_Fruit.Controllers
             HttpContext.Session.Set(StaticValueService.Cart_Key, shopbag);
             return RedirectToAction("Index");
         }
-        public IActionResult RemoveItem(Guid id)
+        public IActionResult RemoveItem(string id)
         {
             var shopbag = cart;
             var product = shopbag.SingleOrDefault(m => m.ProductID.Equals(id));
@@ -64,7 +71,7 @@ namespace EcomercerWebsite_Fruit.Controllers
             }
             else
             {
-                
+
                 shopbag.Remove(product);
             }
             HttpContext.Session.Set(StaticValueService.Cart_Key, shopbag);
@@ -76,10 +83,19 @@ namespace EcomercerWebsite_Fruit.Controllers
         {
             if (cart.Count == 0)
                 return RedirectToAction("Index");
-            return View(cart);
+            //ViewBag.cart = cart;
+            double total = 0;
+            total = cart.Sum(m => m.Total);
+            ViewBag.total = total;
+            BillID = Guid.NewGuid().ToString();
+            var checkOutDTO = new CheckOutDTO
+            {
+                Carts = cart
+            };
+            return View(checkOutDTO);
         }
         [HttpPost]
-        public IActionResult CheckOut(CheckOutDTO model)
+        public async Task<IActionResult> CheckOutAsync(CheckOutDTO model)
         {
             if (ModelState.IsValid)
             {
@@ -87,25 +103,50 @@ namespace EcomercerWebsite_Fruit.Controllers
                 if (customerId != null)
                 {
                     var customer = new Customer();
+                    string billId = BillID;
                     if (model.LikeAccount)
                         customer = _context.customers.SingleOrDefault(p => p.CustomerID.Equals(customerId));
                     var bill = new Bill
                     {
+                        BillID = billId,
                         CustomerID = customer.CustomerID,
                         DayBuy = DateTime.Now,
-
                         DayDelivery = DateTime.Now,
-
                         CustomerName = customer.CustomerName,
-
                         CustomerAddress = customer.CustomerAddress,
-
                         PaymentMethod = "COD",
-
                         WayDelivery = "J&T EXPRESS",
-
-                        DeliveryFee = 0
+                        DeliveryFee = 0,
+                        deliveryStatement = DeliveryStatement.ToPay
                     };
+                    await _context.Database.BeginTransactionAsync();
+                    try
+                    {
+                        await _context.Database.CommitTransactionAsync();
+                        List<BillInformation> listbillInformation = new List<BillInformation>();
+                        foreach (var item in cart)
+                        {
+
+                            listbillInformation.Add(new BillInformation
+                            {
+                                BillInformationID = Guid.NewGuid().ToString(),
+                                BillID = billId,
+                                ProductID = item.ProductID,
+                                ProductCost = item.ProductCost,
+                                BillInformationDiscount = 0
+                            });
+                        }
+                        await _context.bills.AddAsync(bill);
+                        await _context.billInformation.AddRangeAsync(listbillInformation);
+                        await _context.SaveChangesAsync();
+                        HttpContext.Session.Set<List<CartDTO>>(StaticValueService.Cart_Key, new List<CartDTO>());
+                        return View("Index","Home");
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
                 }
             }
             return View(cart);

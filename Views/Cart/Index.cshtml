@@ -56,19 +56,21 @@
                                             @formatNumber .VND/kg
                                         </p>
                                 </td>
-                                <td class="quantity-box">
-                                    @* <div class="input-group-btn">
-                                        <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductID" class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
-                                        </a>
+                                <td >
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductID" class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                <i class="fa fa-minus"></i>
+                                            </a>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center border-0" value="@item.ProductAmount" name="quantity">
+                                        <div class="input-group-btn">
+                                            <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductID" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <input type="text" class="c-input-text qty text" value="@item.ProductAmount" name="quantity">
-                                    <div class="input-group-btn"> *@
-                                        <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductID">
-                                            <input type="number" size="4" value="@item.ProductAmount" min="0" step="1" class="c-input-text qty text">
-                                        </a>
-                                    @* </div> *@
-                                    @* <input type="number" size="4" value="@item.ProductAmount" min="0" step="1" class="c-input-text qty text"> *@
+                                        
                                 </td>
                                 <td class="total-pr">
                                         <p>
@@ -103,8 +105,10 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-lg-6 col-sm-6">
                 <div class="update-box">
+
                     <input value="Update Cart" type="submit">
                 </div>
             </div>
@@ -129,7 +133,7 @@
                         <div class="ml-auto font-weight-bold"> 0.VND </div>
                     </div>
                     <hr class="my-1">
-                    <div class="d-flex">
+                    @* <div class="d-flex">
                         <h4>Coupon Discount</h4>
                         <div class="ml-auto font-weight-bold"> 0.VND </div>
                     </div>
@@ -141,7 +145,7 @@
                         <h4>Shipping Cost</h4>
                         <div class="ml-auto font-weight-bold"> 0.VND </div>
                     </div>
-                    <hr>
+                    <hr> *@
                     <div class="d-flex gr-total">
                         <h5>Grand Total</h5>
                         <div class="ml-auto h5">
@@ -154,7 +158,7 @@
                     <hr>
                 </div>
             </div>
-            <div class="col-12 d-flex shopping-box"><a href="checkout.html" class="ml-auto btn hvr-hover">Checkout</a> </div>
+            <div class="col-12 d-flex shopping-box"><a asp-action="CheckOut" asp-controller="Cart" class="ml-auto btn hvr-hover">Checkout</a> </div>
         </div>
 
     </div>

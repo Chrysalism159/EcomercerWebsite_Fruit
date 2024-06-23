@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcomercerWebsite_Fruit.Migrations
 {
     [DbContext(typeof(EcomercerDataContext))]
-    [Migration("20240513145207_RemoveDayNeedInBill")]
-    partial class RemoveDayNeedInBill
+    [Migration("20240605095455_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,16 +27,15 @@ namespace EcomercerWebsite_Fruit.Migrations
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.Bill", b =>
                 {
-                    b.Property<Guid>("BillID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("BillID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CustomerAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CustomerID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CustomerID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CustomerName")
                         .HasColumnType("nvarchar(max)");
@@ -57,11 +56,8 @@ namespace EcomercerWebsite_Fruit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("StatementID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("StatementInformationStatementID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("StatementInformationStatementID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("WayDelivery")
                         .IsRequired()
@@ -78,24 +74,22 @@ namespace EcomercerWebsite_Fruit.Migrations
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.BillInformation", b =>
                 {
-                    b.Property<Guid>("BillInformationID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("BillInformationID")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("BillID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("BillID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("BillInformationDiscount")
                         .HasColumnType("float");
 
-                    b.Property<int>("BillInformationNumber")
-                        .HasColumnType("int");
-
                     b.Property<double>("ProductCost")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("ProductID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ProductID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("BillInformationID");
 
@@ -108,9 +102,8 @@ namespace EcomercerWebsite_Fruit.Migrations
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.Customer", b =>
                 {
-                    b.Property<Guid>("CustomerID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CustomerID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CustomerAddress")
                         .HasColumnType("nvarchar(max)");
@@ -154,12 +147,12 @@ namespace EcomercerWebsite_Fruit.Migrations
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.Favorite", b =>
                 {
-                    b.Property<Guid>("FavoriteID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("FavoriteID")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("CustomerID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CustomerID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FavoriteDescription")
                         .HasColumnType("nvarchar(max)");
@@ -167,8 +160,9 @@ namespace EcomercerWebsite_Fruit.Migrations
                     b.Property<DateTime?>("PickDay")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ProductID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ProductID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("FavoriteID");
 
@@ -181,9 +175,8 @@ namespace EcomercerWebsite_Fruit.Migrations
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.Product", b =>
                 {
-                    b.Property<Guid>("ProductID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ProductID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double?>("ProductCost")
                         .HasColumnType("float");
@@ -207,14 +200,16 @@ namespace EcomercerWebsite_Fruit.Migrations
                     b.Property<int>("ProductNumberAccess")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ProductTypeID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ProductTypeID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProductUnit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProviderID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ProviderID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ProductID");
 
@@ -227,9 +222,8 @@ namespace EcomercerWebsite_Fruit.Migrations
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.ProductType", b =>
                 {
-                    b.Property<Guid>("ProductTypeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ProductTypeID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProductTypeDescription")
                         .HasColumnType("nvarchar(max)");
@@ -245,9 +239,8 @@ namespace EcomercerWebsite_Fruit.Migrations
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.Provider", b =>
                 {
-                    b.Property<Guid>("ProviderID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ProviderID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -280,9 +273,8 @@ namespace EcomercerWebsite_Fruit.Migrations
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.StatementInformation", b =>
                 {
-                    b.Property<Guid>("StatementID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("StatementID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("StatementDescription")
                         .HasColumnType("nvarchar(max)");
@@ -293,16 +285,14 @@ namespace EcomercerWebsite_Fruit.Migrations
 
                     b.HasKey("StatementID");
 
-                    b.ToTable("statementInformation");
+                    b.ToTable("statementInformations");
                 });
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.Bill", b =>
                 {
                     b.HasOne("EcomercerWebsite_Fruit.Models.Customer", "CustomerNavigation")
                         .WithMany("Bills")
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerID");
 
                     b.HasOne("EcomercerWebsite_Fruit.Models.StatementInformation", null)
                         .WithMany("Bills")

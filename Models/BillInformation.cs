@@ -5,15 +5,15 @@ namespace EcomercerWebsite_Fruit.Models
     public class BillInformation
     {
         [Key]
-        public Guid BillInformationID { get; set; }
+        public string BillInformationID { get; set; }
 
-        public Guid BillID { get; set; }
+        public string BillID { get; set; }
 
-        public Guid ProductID { get; set; }
+        public string ProductID { get; set; }
 
         public double ProductCost { get; set; }
 
-        public int BillInformationNumber { get; set; }
+        //public int BillInformationNumber { get; set; }
 
         public double BillInformationDiscount { get; set; }
 
