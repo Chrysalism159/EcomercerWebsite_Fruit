@@ -119,7 +119,17 @@ namespace EcomercerWebsite_Fruit.Controllers
         [Authorize]
         public IActionResult Profile()
         {
-            return View();
+            var customerId = HttpContext.User.Claims.SingleOrDefault(m => m.Type == StaticValueService.CLAIM_CUSTOMERID).Value;
+            var Oders = _context.bills.Where(m => m.CustomerID.Equals(customerId)).ToList();
+            var numberOder = Oders.Count();
+            var totalmoney = Oders.Sum(m => m.TotalMoney);
+            var Favorites = _context.favorites.Where(m => m.CustomerID.Equals(customerId)).ToList();
+            var numberFav = Favorites.Count();
+            ViewBag.TotalMoney = totalmoney;
+            ViewBag.TotalFav = numberFav;
+            ViewBag.TotalOder = numberOder;
+            var customer = _map.Map<dtoCustomer>(_context.customers.SingleOrDefault(m=>m.CustomerID.Equals(customerId)));
+            return View(customer);
         }
 
         [Authorize]

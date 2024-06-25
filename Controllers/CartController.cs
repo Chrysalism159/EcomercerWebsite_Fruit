@@ -125,7 +125,7 @@ namespace EcomercerWebsite_Fruit.Controllers
                         List<BillInformation> listbillInformation = new List<BillInformation>();
                         foreach (var item in cart)
                         {
-
+                            
                             listbillInformation.Add(new BillInformation
                             {
                                 BillInformationID = Guid.NewGuid().ToString(),
@@ -135,6 +135,9 @@ namespace EcomercerWebsite_Fruit.Controllers
                                 NumberBuyPerProduct = item.ProductAmount,
                                 BillInformationDiscount = 0
                             });
+                            Product product = await _context.products.SingleOrDefaultAsync(m => m.ProductID.Equals(item.ProductID));
+                            product.ProductNumberAccess = product.ProductNumberAccess - item.ProductAmount;
+                            _context.products.Update(product);
                         }
                         await _context.bills.AddAsync(bill);
                         await _context.billInformation.AddRangeAsync(listbillInformation);

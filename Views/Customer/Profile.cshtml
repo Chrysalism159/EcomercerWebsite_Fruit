@@ -1,0 +1,103 @@
+﻿@model EcomercerWebsite_Fruit.DataTransferObject.dtoCustomer
+@{
+    string totalmoney = String.Format("{0:n}", ViewBag.TotalMoney);
+    int numberFav = ViewBag.TotalFav;
+    int numberOder = ViewBag.TotalOder;
+}
+
+<!-- Start Top Search -->
+<div class="top-search">
+    <div class="container">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+            <input type="text" class="form-control" placeholder="Search">
+            <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+        </div>
+    </div>
+</div>
+<!-- End Top Search -->
+<!-- Start All Title Box -->
+<div class="all-title-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>My Account</h2>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active">My Account</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End All Title Box -->
+<!-- Start My Account  -->
+<div class="my-account-box-main">
+    <div class="container">
+        <div class="my-account-page">
+            <div class="row">
+                <div class="col-lg-4 col-md-12">
+                    <div class="account-box">
+                        <div class="service-box">
+                            <div class="service-icon">
+                                <a href="#"> <i class="fa fa-gift"></i> </a>
+                            </div>
+                            <div class="service-desc">
+                                <h4>Your Orders</h4>
+                                <p>You have done <p>@numberOder</p> oders</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="account-box">
+                        <div class="service-box">
+                            <div class="service-icon">
+                                <a href="#"> <i class="fa fa-credit-card"></i> </a>
+                            </div>
+                            <div class="service-desc">
+                                <h4>Total Money Spent</h4>
+                                <p>You has spent <p>@totalmoney<span>.VND</span></p> in total</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="account-box">
+                        <div class="service-box">
+                            <div class="service-icon">
+                                <a asp-action="WishList" asp-controller="Product"><i class="fa fa-heart"></i> </a>
+                            </div>
+                            <div class="service-desc">
+                                <h4>Your Wish List</h4>
+                                <p>You had <p>@numberFav</p> product in your wish list</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-box">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="account-box">
+                            <div class="service-box">
+                                <div class="service-icon">
+                                    <a asp-action="WishList" asp-controller="Product"><i class="fa fa-user"></i> </a>
+                                </div>
+                                <div class="service-desc">
+                                    <h4>Your Profile Information</h4>
+                                    <p>@Model.CustomerName</p>
+                                    <p>@Model.CustomerPhone</p>
+                                    <p>@Model.CustomerAddress</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End My Account -->

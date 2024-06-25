@@ -11,9 +11,6 @@ namespace EcomercerWebsite_Fruit.Models
 
         public string CustomerID { get; set; }
 
-        public DateTime? PickDay { get; set; }
-
-        public string? FavoriteDescription { get; set; }
 
         public virtual Product? ProductNavigation { get; set; }
 

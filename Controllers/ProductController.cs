@@ -2,6 +2,7 @@
 using EcomercerWebsite_Fruit.DataTransferObject;
 using EcomercerWebsite_Fruit.Models;
 using EcomercerWebsite_Fruit.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,9 +63,97 @@ namespace EcomercerWebsite_Fruit.Controllers
             }
             return View();
         }
-        public IActionResult WishList (string id)
+        [Authorize]
+        public IActionResult WishList ()
         {
+            var customerId = HttpContext.User.Claims.SingleOrDefault(m => m.Type == StaticValueService.CLAIM_CUSTOMERID).Value;
+            List<dtoWishList> wishLists = new List<dtoWishList>();
+            
+            if(customerId != null)
+            {
+                var list = _context.favorites.Where(m=>m.CustomerID.Equals(customerId)).ToList();
+                foreach(var item in list)
+                {
+                    dtoProduct product = _map.Map<dtoProduct>(_context.products.SingleOrDefault(h => h.ProductID.Equals(item.ProductID)));
+                    dtoWishList LikeProduct;
+                    if (product.ProductNumberAccess > 0)
+                    {
+                        LikeProduct = new dtoWishList
+                        {
+                            ProductID = item.ProductID,
+                            ProductImage = product.ProductImage,
+                            ProductName = product.ProductName,
+                            ProductCost = product.ProductCost,
+                            IsAvailable = true
+                        };
+                    }
+                    else
+                        LikeProduct = new dtoWishList
+                        {
+                            ProductID = item.ProductID,
+                            ProductImage = product.ProductImage,
+                            ProductName = product.ProductName,
+                            ProductCost = product.ProductCost,
+                            IsAvailable = false
+                        };
+                    wishLists.Add(LikeProduct);
+                }
+                
+            }
+            return View(wishLists);
+        }
+        [Authorize]
+        public IActionResult AddToWishList(string id)
+        {
+            var customerId = HttpContext.User.Claims.SingleOrDefault(m => m.Type == StaticValueService.CLAIM_CUSTOMERID).Value;
+            if (id != null)
+            {
+                var wishlist = _context.favorites.Where(m=>m.CustomerID.Equals(customerId)).ToList();
+                var check = wishlist.SingleOrDefault(m => m.ProductID.Equals(id));
+                if(check != null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    Favorite newFavorite = new Favorite
+                    {
+                        CustomerID = customerId,
+                        FavoriteID = Guid.NewGuid().ToString(),
+                        ProductID = id
+                    };
+                    _context.favorites.Add(newFavorite);
+                    _context.SaveChanges();
+                    return RedirectToAction("WishList", "Product");
+                }
+
+            }
             return View();
         }
+        [Authorize]
+        public IActionResult RemoveFromWishList(string id)
+        {
+            var customerId = HttpContext.User.Claims.SingleOrDefault(m => m.Type == StaticValueService.CLAIM_CUSTOMERID).Value;
+            if (id != null)
+            {
+                var wishList = _context.favorites.Where(m=>m.CustomerID.Equals(customerId)).ToList();
+                var product = wishList.SingleOrDefault(m => m.ProductID.Equals(id));
+                if (product == null)
+                {
+                    TempData["Message"] = $"Không thấy sản phẩm có mã {id}";
+                    return Redirect("/404");
+                }
+                else
+                {
+
+                    _context.favorites.Remove(product);
+                    _context.SaveChanges();
+                    return RedirectToAction("WishList", "Product");
+                }
+
+            }
+            return View();
+        }
+
     }
 }
