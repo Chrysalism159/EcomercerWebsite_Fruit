@@ -4,6 +4,7 @@ using EcomercerWebsite_Fruit.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcomercerWebsite_Fruit.Migrations
 {
     [DbContext(typeof(EcomercerDataContext))]
-    partial class EcomercerDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240625090410_updateBill")]
+    partial class updateBill
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,9 +58,6 @@ namespace EcomercerWebsite_Fruit.Migrations
 
                     b.Property<string>("StatementInformationStatementID")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Tax")
-                        .HasColumnType("float");
 
                     b.Property<double>("TotalMoney")
                         .HasColumnType("float");

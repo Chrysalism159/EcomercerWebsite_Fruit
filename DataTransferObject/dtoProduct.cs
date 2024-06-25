@@ -1,6 +1,6 @@
 ﻿namespace EcomercerWebsite_Fruit.DataTransferObject
 {
-    public class ProductDTO
+    public class dtoProduct
     {
         public string ProductID { get; set; }
 

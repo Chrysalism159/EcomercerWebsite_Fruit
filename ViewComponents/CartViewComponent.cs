@@ -13,7 +13,7 @@ namespace EcomercerWebsite_Fruit.ViewComponents
         public IViewComponentResult Invoke()
         {
             //để dùng được session thì cần đăng kí trong program, sau đó khởi tạo extension set và get (SesionExtension)
-            var cart = HttpContext.Session.Get<List<CartDTO>>(StaticValueService.Cart_Key) ?? new List<CartDTO>();
+            var cart = HttpContext.Session.Get<List<dtoCart>>(StaticValueService.Cart_Key) ?? new List<dtoCart>();
                 //HttpContext.Session.Get<List<CartDTO>>(StaticValueService.Cart_Key) ?? new List<CartDTO>();
             return View(new TotalCartDTO
             {

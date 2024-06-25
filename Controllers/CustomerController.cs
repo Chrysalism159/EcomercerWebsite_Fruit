@@ -27,7 +27,7 @@ namespace EcomercerWebsite_Fruit.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(CustomerDTO model, IFormFile imagesFile)
+        public async Task<IActionResult> Register(dtoCustomer model, IFormFile imagesFile)
         {
             model.CustomerID = Guid.NewGuid().ToString();
             if(ModelState.IsValid)

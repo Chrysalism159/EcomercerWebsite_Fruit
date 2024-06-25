@@ -25,7 +25,7 @@ namespace EcomercerWebsite_Fruit.Controllers
             {
                 productList = productList.Where(h => h.ProductTypeID == type);
             }
-            var data = productList.Select(h => new ProductDTO
+            var data = productList.Select(h => new dtoProduct
             {
                 ProductID = h.ProductID,
                 ProductName = h.ProductName,
@@ -39,7 +39,7 @@ namespace EcomercerWebsite_Fruit.Controllers
             int totalPage = data.Count() / pageSize;
             ViewBag.total = data.Count();
             ViewBag.type = type;
-            return View(PaginatedListServices<ProductDTO>.CreateAsync(data.AsNoTracking(), page ?? 1, pageSize));
+            return View(PaginatedListServices<dtoProduct>.CreateAsync(data.AsNoTracking(), page ?? 1, pageSize));
         }
         public IActionResult Detail(string id)
         {
@@ -53,13 +53,17 @@ namespace EcomercerWebsite_Fruit.Controllers
                 }
                 else
                 {
-                    var product = _map.Map<ProductDTO>(data);
+                    var product = _map.Map<dtoProduct>(data);
                     List<Product> relatedDatas = _context.products.Where(m => m.ProductCost <= data.ProductCost).ToList();
-                    List<ProductDTO> relatedProducts = _map.Map<List<ProductDTO>>(relatedDatas);
+                    List<dtoProduct> relatedProducts = _map.Map<List<dtoProduct>>(relatedDatas);
                     ViewBag.relatedProducts = relatedProducts;
                     return View(product);
                 }
             }
+            return View();
+        }
+        public IActionResult WishList (string id)
+        {
             return View();
         }
     }

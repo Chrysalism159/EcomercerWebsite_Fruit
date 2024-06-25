@@ -7,8 +7,8 @@ namespace EcomercerWebsite_Fruit.Services
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile() {
-            CreateMap<CustomerDTO, Customer>();
-            CreateMap<ProductDTO, Product>().ReverseMap();
+            CreateMap<dtoCustomer, Customer>();
+            CreateMap<dtoProduct, Product>().ReverseMap();
 
         }
     }

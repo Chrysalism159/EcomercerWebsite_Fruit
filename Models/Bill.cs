@@ -24,6 +24,8 @@ namespace EcomercerWebsite_Fruit.Models
         public string WayDelivery { get; set; } = null!;
 
         public double DeliveryFee { get; set; }
+        public double TotalMoney {  get; set; }
+        public double Tax {  get; set; }
         [NotMapped]
         public DeliveryStatement? deliveryStatement { get; set; }
 

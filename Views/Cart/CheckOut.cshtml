@@ -1,11 +1,14 @@
-﻿@model EcomercerWebsite_Fruit.DataTransferObject.CheckOutDTO
+﻿@model EcomercerWebsite_Fruit.DataTransferObject.dtoCheckOut
+
 @using EcomercerWebsite_Fruit.DataTransferObject
 @{
     //List<CartDTO> cart = ViewBag.cart;
-    double subTotal = (double)ViewBag.total;
+
+    List<dtoCart> cartItem = ViewBag.Cart;
+    double total = 0;
+    total = cartItem.Sum(m => m.Total);
+    double subTotal = total;
     double tax = subTotal * 0.08;
-    ViewBag.ShippingFee = 0;
-    ViewBag.testJavascript = 123456;
 }
 <!-- Start All Title Box -->
 <div class="all-title-box">
@@ -35,7 +38,7 @@
                         </div>
 
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" name="LikeAccount" id="LikeAccount" value="false">
+                            <input type="checkbox" class="custom-control-input" asp-for="LikeAccount" name="LikeAccount" id="LikeAccount" value="false">
                             <label class="custom-control-label" for="LikeAccount">Shipping address is the same as my billing address</label>
                         </div>
                         <div class="custom-control custom-checkbox">
@@ -47,18 +50,18 @@
                         <div class="mb-3 delivery-infor">
                             <label for="fullName delivery-infor">Receiver Name *</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="fullName" asp-for="@Model.Name" placeholder="" required>
+                                <input type="text" class="form-control" id="fullName" asp-for="Name" placeholder="" required>
                                 <div class="invalid-feedback" style="width: 100%;"> Your name is required. </div>
                             </div>
                         </div>
                         <div class="mb-3 delivery-infor">
                             <label for="address">Address *</label>
-                            <input type="text" class="form-control" asp-for="@Model.Address" id="address" placeholder="" required>
+                            <input type="text" class="form-control" asp-for="Address" id="address" placeholder="" required>
                             <div class="invalid-feedback"> Please enter your shipping address. </div>
                         </div>
                         <div class="mb-3 delivery-infor">
                             <label for="phone">Phone number *</label>
-                            <input type="text" class="form-control" id="phone" asp-for="@Model.Phonenumber" placeholder="" required>
+                            <input type="text" class="form-control" id="phone" asp-for="Phonenumber" placeholder="" required>
                             <div class="invalid-feedback"> Please enter your phone number for shipping contact. </div>
                         </div>
 
@@ -68,19 +71,19 @@
                         </div>
                         <div class="d-block my-3">
                             <div class="custom-control custom-radio">
-                                <input asp-for="@Model.ShippingFee" onClick="funcShip()" class="custom-control-input" id="deliveries1" name="ShippingFee" value="0" type="radio" required>
+                                <input asp-for="ShippingFee" onClick="funcShip()" class="custom-control-input" id="deliveries1" name="ShippingFee" value="0" type="radio" checked required>
                                 <label class="custom-control-label" for="deliveries1">Standard Delivery</label>
                                 <span class="float-right font-weight-bold">FREE</span>
                             </div>
                             <div class="ml-4 mb-2 small">(3-7 business days)</div>
                             <div class="custom-control custom-radio">
-                                <input asp-for="@Model.ShippingFee" onClick="funcShip()" id="deliveries2" class="custom-control-input" name="ShippingFee" value="20000" type="radio" required>
+                                <input asp-for="ShippingFee" onClick="funcShip()" id="deliveries2" class="custom-control-input" name="ShippingFee" value="20000" type="radio" required>
                                 <label class="custom-control-label" for="deliveries2">Express Delivery</label>
                                 <span class="float-right font-weight-bold">20.000.VND</span>
                             </div>
                             <div class="ml-4 mb-2 small">(2-4 business days)</div>
                             <div class="custom-control custom-radio">
-                                <input asp-for="@Model.ShippingFee" onClick="funcShip()" id="deliveries3" class="custom-control-input" name="ShippingFee" value="35000" type="radio" required>
+                                <input asp-for="ShippingFee" onClick="funcShip()" id="deliveries3" class="custom-control-input" name="ShippingFee" value="35000" type="radio" required>
                                 <label class="custom-control-label" for="deliveries3">Next Business day</label>
                                 <span class="float-right font-weight-bold">35.000.VND</span>
                             </div>
@@ -89,6 +92,7 @@
                         <hr class="mb-1">
                     </div>
                 </div>
+
                 <div class="col-sm-6 col-lg-6 mb-3">
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
@@ -98,15 +102,15 @@
                                 </div>
                                 <div class="d-block my-3">
                                     <div class="custom-control custom-radio">
-                                        <input id="cod" name="paymentMethod" type="radio" class="custom-control-input" required>
+                                        <input id="cod" name="paymentMethod" asp-for="PaymentMethod" value="COD" type="radio" class="custom-control-input" required checked>
                                         <label class="custom-control-label" for="cod">Cash on Delivery</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                                        <input id="debit" name="paymentMethod" asp-for="PaymentMethod" value="DEBIT" type="radio" class="custom-control-input" required>
                                         <label class="custom-control-label" for="debit">Debit card</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                                        <input id="paypal" name="paymentMethod" asp-for="PaymentMethod" value="PAYPAL" type="radio" class="custom-control-input" required>
                                         <label class="custom-control-label" for="paypal">Paypal</label>
                                     </div>
                                 </div>
@@ -155,7 +159,7 @@
                                 <h3>Shopping cart</h3>
                             </div>
                             <div class="rounded p-2 bg-light">
-                                @foreach (var item in Model.Carts)
+                                @foreach (var item in cartItem)
                                 {
                                     <div class="media mb-2 border-bottom">
                                         <div class="media-body">
@@ -164,8 +168,8 @@
                                                 Price: @{
                                                     string cost = String.Format("{0:n}", item.ProductCost);
                                                 }@cost .VND<span class="mx-2">|</span> Qty: @item.ProductAmount <span class="mx-2">|</span> Subtotal: @{
-                                                    string total = String.Format("{0:n}", item.ProductCost);
-                                                }@total .VND
+                                                    string subtotal = String.Format("{0:n}", item.ProductCost);
+                                                }@subtotal .VND
                                             </div>
                                         </div>
                                     </div>
@@ -187,7 +191,7 @@
                                 <h4>Sub Total</h4>
                                 <div class="ml-auto font-weight-bold">
                                     @{
-                                        string formatNumber = String.Format("{0:n}", ViewBag.total);
+                                        string formatNumber = String.Format("{0:n}", total);
                                     }
                                     @formatNumber<span class="ml-auto font-weight-bold">.VND</span>
                                     @* <span class="ml-auto font-weight-bold" id="subTotal"></span> *@
@@ -214,7 +218,7 @@
                                 <h5>Grand Total</h5>
                                 <div class="ml-auto h5">
                                     @{
-                                        double grandTotal = ViewBag.total + tax + Model.ShippingFee;
+                                        double grandTotal = total + tax;
                                         string grandTotalFormat = String.Format("{0:n}", grandTotal);
                                     }
                                     <span class="ml-auto font-weight-bold" id="grandTotal">@grandTotalFormat</span><span class="ml-auto font-weight-bold">.VND</span>
@@ -232,9 +236,12 @@
     </div>
 </form>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
+
+
+
+    
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -260,8 +267,9 @@
             // Trigger change event on page load to ensure correct display
             $('input[name="paymentMethod"]:checked').trigger('change');
         });
-
+        
         function funcShip() {
+           
             const ship = document.getElementsByName("ShippingFee");
             let selectedFee = 0;
             for (const option of ship) {
@@ -270,9 +278,9 @@
                     break;
                 }
             }
-            
+
             const shipFee = Number(selectedFee);
-            const total = @ViewBag.total;
+            const total = @total;
             const tax = @tax;
             const grandTotal = total + tax + shipFee;
             const options = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
@@ -281,8 +289,6 @@
             const taxFee = tax.toLocaleString('en-US', options);
             const GrandTotal = grandTotal.toLocaleString('en-US', options);
             document.getElementById("shippingCost").innerHTML = shippingFee;
-            // document.getElementById("subTotal").innerHTML = subTotal;
-            // document.getElementById("tax").innerHTML = taxFee;
             document.getElementById("grandTotal").innerHTML = GrandTotal;
 
 

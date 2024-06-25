@@ -12,7 +12,8 @@ namespace EcomercerWebsite_Fruit.Models
         public string ProductID { get; set; }
 
         public double ProductCost { get; set; }
-
+        
+        public int NumberBuyPerProduct { get; set; }
         //public int BillInformationNumber { get; set; }
 
         public double BillInformationDiscount { get; set; }

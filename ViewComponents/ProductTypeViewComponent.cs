@@ -12,7 +12,7 @@ namespace EcomercerWebsite_Fruit.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var data = _context.productTypes.Select(m => new ProductTypeDTO
+            var data = _context.productTypes.Select(m => new dtoProductType
             {
                 ProductTypeID = m.ProductTypeID,
                 ProductTypeName = m.ProductTypeName,

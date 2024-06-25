@@ -3,6 +3,7 @@ using EcomercerWebsite_Fruit.Models;
 using EcomercerWebsite_Fruit.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcomercerWebsite_Fruit.Controllers
@@ -15,7 +16,7 @@ namespace EcomercerWebsite_Fruit.Controllers
         {
             _context = context;
         }
-        public List<CartDTO> cart => HttpContext.Session.Get<List<CartDTO>>(StaticValueService.Cart_Key) ?? new List<CartDTO>();
+        public List<dtoCart> cart => HttpContext.Session.Get<List<dtoCart>>(StaticValueService.Cart_Key) ?? new List<dtoCart>();
         public IActionResult Index()
         {
             double total = 0;
@@ -24,7 +25,6 @@ namespace EcomercerWebsite_Fruit.Controllers
             ViewBag.total = total;
             return View(cart);
         }
-        string BillID;
         double ShippingFee = 0;
         public IActionResult UpdateShippingFee(double value)
         {
@@ -47,7 +47,7 @@ namespace EcomercerWebsite_Fruit.Controllers
                     TempData["Message"] = $"Không thấy sản phẩm có mã {id}";
                     return Redirect("/404");
                 }
-                var newProduct = new CartDTO
+                var newProduct = new dtoCart
                 {
                     ProductID = data.ProductID,
                     ProductName = data.ProductName,
@@ -83,19 +83,13 @@ namespace EcomercerWebsite_Fruit.Controllers
         {
             if (cart.Count == 0)
                 return RedirectToAction("Index");
-            //ViewBag.cart = cart;
-            double total = 0;
-            total = cart.Sum(m => m.Total);
-            ViewBag.total = total;
-            BillID = Guid.NewGuid().ToString();
-            var checkOutDTO = new CheckOutDTO
-            {
-                Carts = cart
-            };
-            return View(checkOutDTO);
+            
+
+            ViewBag.Cart = cart;
+            return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CheckOutAsync(CheckOutDTO model)
+        public async Task<IActionResult> CheckOut(dtoCheckOut model)
         {
             if (ModelState.IsValid)
             {
@@ -103,9 +97,11 @@ namespace EcomercerWebsite_Fruit.Controllers
                 if (customerId != null)
                 {
                     var customer = new Customer();
-                    string billId = BillID;
+                    string billId = Guid.NewGuid().ToString(); 
                     if (model.LikeAccount)
                         customer = _context.customers.SingleOrDefault(p => p.CustomerID.Equals(customerId));
+                    double total = cart.Sum(m => m.Total);
+                    double tax = total * 0.08;
                     var bill = new Bill
                     {
                         BillID = billId,
@@ -114,10 +110,13 @@ namespace EcomercerWebsite_Fruit.Controllers
                         DayDelivery = DateTime.Now,
                         CustomerName = customer.CustomerName,
                         CustomerAddress = customer.CustomerAddress,
-                        PaymentMethod = "COD",
+                        PaymentMethod = model.PaymentMethod,
                         WayDelivery = "J&T EXPRESS",
-                        DeliveryFee = 0,
+                        DeliveryFee = model.ShippingFee,
+                        Tax = tax,
+                        TotalMoney = total + tax + model.ShippingFee,
                         deliveryStatement = DeliveryStatement.ToPay
+
                     };
                     await _context.Database.BeginTransactionAsync();
                     try
@@ -133,14 +132,15 @@ namespace EcomercerWebsite_Fruit.Controllers
                                 BillID = billId,
                                 ProductID = item.ProductID,
                                 ProductCost = item.ProductCost,
+                                NumberBuyPerProduct = item.ProductAmount,
                                 BillInformationDiscount = 0
                             });
                         }
                         await _context.bills.AddAsync(bill);
                         await _context.billInformation.AddRangeAsync(listbillInformation);
                         await _context.SaveChangesAsync();
-                        HttpContext.Session.Set<List<CartDTO>>(StaticValueService.Cart_Key, new List<CartDTO>());
-                        return View("Index","Home");
+                        HttpContext.Session.Set<List<dtoCart>>(StaticValueService.Cart_Key, new List<dtoCart>());
+                        return RedirectToAction("Index", "Home");
                     }
                     catch (Exception ex)
                     {
@@ -149,7 +149,7 @@ namespace EcomercerWebsite_Fruit.Controllers
 
                 }
             }
-            return View(cart);
+            return View();
         }
     }
 }
