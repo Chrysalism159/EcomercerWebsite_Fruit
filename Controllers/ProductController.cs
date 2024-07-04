@@ -5,6 +5,7 @@ using EcomercerWebsite_Fruit.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 
 namespace EcomercerWebsite_Fruit.Controllers
 {
@@ -18,7 +19,7 @@ namespace EcomercerWebsite_Fruit.Controllers
             _context = context;
             _map = map;
         }
-        public IActionResult Index(string? type, int? page)
+        public IActionResult Index(string? type, int? page, string? sort)
         {
             var productList = _context.products.AsQueryable();
             int pagenumber = (page ?? 1);
@@ -36,11 +37,27 @@ namespace EcomercerWebsite_Fruit.Controllers
                 ProviderName = h.ProviderNavigation.ProviderName,
                 ProductTypeName = h.ProductTypeNavigation.ProductTypeName
             });
+            switch (sort)
+            {
+                case "ascPrice":
+                    data = data.OrderBy(s => s.ProductCost);
+                    break;
+                case "descPrice":
+                    data = data.OrderByDescending(s => s.ProductCost);
+                    break;
+                case "bestSelling":
+                    data = data.OrderByDescending(s => s.ProductNumberAccess);
+                    break;
+                default:
+                    data = data.OrderBy(s => s.ProductName);
+                    break;
+            }
             int pageSize = 9;
             int totalPage = data.Count() / pageSize;
             ViewBag.total = data.Count();
             ViewBag.type = type;
-            return View(PaginatedListServices<dtoProduct>.CreateAsync(data.AsNoTracking(), page ?? 1, pageSize));
+            ViewBag.sort = sort;
+            return View(PaginatedListServices<dtoProduct>.CreateAsync(data.ToList(), page ?? 1, pageSize));
         }
         public IActionResult Detail(string id)
         {
@@ -48,6 +65,7 @@ namespace EcomercerWebsite_Fruit.Controllers
             if(id != null)
             {
                 var data = _context.products.SingleOrDefault(h => h.ProductID.Equals( id));
+                
                 if(data == null)
                 {
                     return NotFound();
@@ -55,13 +73,33 @@ namespace EcomercerWebsite_Fruit.Controllers
                 else
                 {
                     var product = _map.Map<dtoProduct>(data);
+                    List<dtoReview> relatedComment = _map.Map<List<dtoReview>>(_context.reviews.Where(m=>m.ProductID == id));
                     List<Product> relatedDatas = _context.products.Where(m => m.ProductCost <= data.ProductCost).ToList();
                     List<dtoProduct> relatedProducts = _map.Map<List<dtoProduct>>(relatedDatas);
+                    List<dtoCustomer> relatedCustomers = _map.Map<List<dtoCustomer>>(_context.customers.ToList());
+                    foreach(var review in relatedComment)
+                    {
+                        var customer = relatedCustomers.SingleOrDefault(m=>m.CustomerID == review.CustomerID);
+                        review.CustomerName = customer.CustomerName;
+                        review.CustomerAvt = customer.CustomerImages;
+                    }
                     ViewBag.relatedProducts = relatedProducts;
+                    ViewBag.relatedReview = relatedComment;
                     return View(product);
                 }
             }
             return View();
+        }
+        public IActionResult Search(string? value, int? page)
+        {
+            var productList = _context.products.AsQueryable();
+            int pagenumber = (page ?? 1);
+            var data = _map.Map<List<dtoProduct>>(productList.Where(m=>m.ProductName.Contains(value)));
+            int pageSize = 9;
+            int totalPage = data.Count() / pageSize;
+            ViewBag.total = data.Count();
+            ViewBag.value = value;
+            return View(PaginatedListServices<dtoProduct>.CreateAsync(data, page ?? 1, pageSize));
         }
         [Authorize]
         public IActionResult WishList ()

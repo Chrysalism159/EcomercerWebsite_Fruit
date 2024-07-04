@@ -4,6 +4,7 @@ using EcomercerWebsite_Fruit.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcomercerWebsite_Fruit.Migrations
 {
     [DbContext(typeof(EcomercerDataContext))]
-    partial class EcomercerDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240628125514_FKReviewtoProduct")]
+    partial class FKReviewtoProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -712,7 +715,6 @@ namespace EcomercerWebsite_Fruit.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ProductID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ReviewID");
@@ -819,15 +821,11 @@ namespace EcomercerWebsite_Fruit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EcomercerWebsite_Fruit.Models.Product", "product")
+                    b.HasOne("EcomercerWebsite_Fruit.Models.Product", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductID");
 
                     b.Navigation("customer");
-
-                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.Bill", b =>

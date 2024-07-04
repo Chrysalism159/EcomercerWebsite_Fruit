@@ -26,9 +26,13 @@ namespace EcomercerWebsite_Fruit.Models
 
         public int ProductNumberAccess { get; set; }
 
+        public int NumberProductSell { get; set; }
+
         public string? ProductDescription { get; set; }
 
         public string ProviderID { get; set; }
+
+        public string? ReviewID { get; set; }
         //public virtual ICollection<BanBe> BanBes { get; set; } = new List<BanBe>();
 
         public virtual ICollection<BillInformation> BillInformations { get; set; } = new List<BillInformation>();
@@ -36,6 +40,8 @@ namespace EcomercerWebsite_Fruit.Models
         public virtual ProductType ProductTypeNavigation { get; set; } = null!;
 
         public virtual Provider ProviderNavigation { get; set; } = null!;
+
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
         public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
     }

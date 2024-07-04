@@ -38,6 +38,7 @@ namespace EcomercerWebsite_Fruit.Controllers
                     customer.RandomKey = MasterServices.GenerateRamdomKey();
                     if (imagesFile != null)
                     {
+                        //avatar3_9eef87.jpg
                         customer.CustomerImages = MasterServices.UploadImages(imagesFile, "CustomerImages");
                     }
                     customer.CustomerPassword = model.CustomerPassword.ToMd5Hash(customer.RandomKey);
@@ -131,7 +132,47 @@ namespace EcomercerWebsite_Fruit.Controllers
             var customer = _map.Map<dtoCustomer>(_context.customers.SingleOrDefault(m=>m.CustomerID.Equals(customerId)));
             return View(customer);
         }
+        [Authorize]
+        public async Task<IActionResult> Comment(string content, string productID)
+        {
+            var customerId = HttpContext.User.Claims.SingleOrDefault(m => m.Type == StaticValueService.CLAIM_CUSTOMERID).Value;
+            if(customerId == null)
+            {
+                return Redirect("/Customer/Login");
+            }
+            
+            if (content!=null)
+            {
+                var customer = _map.Map<dtoCustomer>(_context.customers.SingleOrDefault(m => m.CustomerID.Equals(customerId)));
+                if (customer == null)
+                {
+                    TempData["Message"] = $"Không thấy tài khoản có mã {customerId}";
+                    return Redirect("/404");
+                }
+                var transaction = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    Review review = new Review();
+                    review.ReviewID = Guid.NewGuid().ToString();
+                    review.Content = content;
+                    review.CustomerID = customerId;
+                    review.DayReview = DateTime.Now;
+                    review.ProductID = productID;
+                    await _context.reviews.AddAsync(review);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    
+                    
+                }catch(Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    return RedirectToAction("Error", "Home");
+                }
 
+            }
+            return RedirectToAction("Detail", "Product", new {id = productID});
+        }
         [Authorize]
         public async Task<IActionResult> LogOut()
         {

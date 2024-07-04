@@ -159,7 +159,7 @@
                 <!-- Start Atribute Navigation -->
                 <div class="attr-nav">
                     <ul>
-                        <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
+                        <li class="search" onclick="toggleContent()"><a href=" #"><i class="fa fa-search"></i></a></li>
                         @await Component.InvokeAsync("Cart")
                     </ul>
                 </div>
@@ -226,7 +226,20 @@
                 });
             });
         });
+        function toggleContent() {
+            var content = document.getElementById("searchcontent");
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+            } else {
+                content.style.display = "none";
+            }
+        }
 
+        function closeContent(event) {
+            event.stopPropagation(); // Ngăn chặn sự kiện click lan ra phần tử cha
+            var content = document.getElementById("searchcontent");
+            content.style.display = "none";
+        }
     </script>
 
     <!-- ALL JS FILES -->

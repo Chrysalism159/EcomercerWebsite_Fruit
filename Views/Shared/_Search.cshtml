@@ -1,11 +1,18 @@
 ﻿ <!-- Start Top Search -->
-<div class="top-search">
+<div class="top-search" id="searchcontent" style="display: none">
     <div class="container">
-        <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-            <input type="text" class="form-control" placeholder="Search">
-            <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
-        </div>
+        <form asp-action="Search" asp-controller="Product">
+        <div class="input-group" >
+            
+                <span class="input-group-addon"><i type="submit" class="fa fa-search"></i></span>
+                <input type="text" class="form-control" name="value" placeholder="Search">
+                <span class="input-group-addon close-search" onclick="closeContent(event)"><i class="fa fa-times"></i></span>
+
+            </div>
+        </form>
     </div>
 </div>
+@section Scripts{
+    
+}
 <!-- End Top Search -->

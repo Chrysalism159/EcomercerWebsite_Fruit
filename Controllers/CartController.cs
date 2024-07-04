@@ -118,10 +118,10 @@ namespace EcomercerWebsite_Fruit.Controllers
                         deliveryStatement = DeliveryStatement.ToPay
 
                     };
-                    await _context.Database.BeginTransactionAsync();
+                    var transaction = await _context.Database.BeginTransactionAsync();
                     try
                     {
-                        await _context.Database.CommitTransactionAsync();
+                        
                         List<BillInformation> listbillInformation = new List<BillInformation>();
                         foreach (var item in cart)
                         {
@@ -142,12 +142,15 @@ namespace EcomercerWebsite_Fruit.Controllers
                         await _context.bills.AddAsync(bill);
                         await _context.billInformation.AddRangeAsync(listbillInformation);
                         await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
                         HttpContext.Session.Set<List<dtoCart>>(StaticValueService.Cart_Key, new List<dtoCart>());
                         return RedirectToAction("Index", "Home");
                     }
                     catch (Exception ex)
                     {
-
+                        await transaction.RollbackAsync();
+                        Console.WriteLine("An error occurred: " + ex.Message);
+                        return RedirectToAction("Error", "Home");
                     }
 
                 }

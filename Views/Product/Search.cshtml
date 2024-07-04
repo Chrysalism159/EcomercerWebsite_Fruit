@@ -33,11 +33,12 @@
                         <div class="col-12 col-sm-8 text-center text-sm-left">
                             <div class="toolbar-sorter-right">
                                 <span>Sort by </span>
-                                <select id="basic" class="selectpicker show-tick form-control" onchange="sortEvent(this)" data-placeholder="$ USD">
+                                <select id="basic" class="selectpicker show-tick form-control" data-placeholder="$ USD">
                                     <option data-display="Select">Nothing</option>
-                                    <option name="selectOptions" value="@Url.Action("Index", new { sort = "ascPrice" })">Low Price → High Price</option>
-                                    <option name="selectOptions" value="@Url.Action("Index", new { sort = "descPrice" })">High Price → Low Price</option>
-                                    <option name="selectOptions" value="@Url.Action("Index", new { sort = "bestSelling" })">Best Selling</option>
+                                    <option value="1">Popularity</option>
+                                    <option value="2">High Price → High Price</option>
+                                    <option value="3">Low Price → High Price</option>
+                                    <option value="4">Best Selling</option>
                                 </select>
                             </div>
                             <p>Showing all <span>@ViewBag.total</span> results</p>
@@ -61,7 +62,7 @@
                                                     <div class="mask-icon">
                                                         <ul>
                                                             <li><a asp-action="Detail" asp-controller="Product" asp-route-id="@item.ProductID" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
-                                                            <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                                            @* <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li *@>
                                                             <li><a asp-action="AddToWishList" asp-controller="Product" asp-route-id="@item.ProductID" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
                                                         </ul>
                                                         <a class="cart" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductID">Add to Cart</a>
@@ -69,8 +70,9 @@
                                                 </div>
                                                 <div class="why-text">
                                                     <h4>@item.ProductName</h4>
-                                                    <h5>@{
-                                                            string formatNumber = String.Format("{0:n}", item.ProductCost); 
+                                                    <h5>
+                                                        @{
+                                                            string formatNumber = String.Format("{0:n}", item.ProductCost);
                                                         }
                                                         @formatNumber .VND
                                                     </h5>
@@ -85,11 +87,10 @@
                     </div>
                 </div>
                 <div class="owl-nav">
-                    
                 </div>
                 <div class="pagination d-flex justify-content-center mt-5">
-                    <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex - 1)" asp-route-sort="@ViewBag.sort" class="btn hvr-hover"><i class="fas fa-arrow-left"></i></a>
-                    <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex + 1)" asp-route-sort="@ViewBag.sort" class="btn hvr-hover"><i class="fas fa-arrow-right"></i></a>
+                    <a asp-action="Search" asp-route-value="@ViewBag.value"  asp-route-page="@(Model.PageIndex - 1)" class="btn hvr-hover"><i class="fas fa-arrow-left"></i></a>
+                    <a asp-action="Search" asp-route-value="@ViewBag.value"  asp-route-page="@(Model.PageIndex + 1)" class="btn hvr-hover"><i class="fas fa-arrow-right"></i></a>
                     @* <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex - 1)" class="btn hvr-hover">&laquo;</a>
 
                     <a asp-action="Index" asp-route-type="@ViewBag.type" asp-route-page="@(Model.PageIndex + 1)" class="btn hvr-hover">&raquo;</a> *@
@@ -124,48 +125,4 @@
         </div>
     </div>
 </div>
-@section Scripts{
-    <script>
-        // function sortEvent(selectElement) {
-        //     var selectedOption = selectElement.options[selectElement.selectedIndex];
-        //     var url = selectedOption.value;
-        //     var title = selectedOption.textContent;
-        //     console.log(title);
-
-        //     if (url) {
-        //         window.location.href = url;
-        //         document.getElementById("basic").title = title;// Thay thế bằng window.location.href = url; để điều hướng trang
-        //     }
-        // }
-
-        function sortEvent(selectElement) {
-            var selectedOption = selectElement.options[selectElement.selectedIndex];
-            var url = selectedOption.value;
-            var title = selectedOption.textContent;
-
-            if (url) {
-                // Lưu giá trị title vào LocalStorage
-                localStorage.setItem('selectedOptionTitle', title);
-
-                // Điều hướng trang
-                window.location.href = url;
-            }
-        }
-
-        // Code này phải được đặt trong một script sau khi trang đã được tải lại để khôi phục giá trị title
-        document.addEventListener('DOMContentLoaded', function () {
-            var storedTitle = localStorage.getItem('selectedOptionTitle');
-           
-            if (storedTitle) {
-                var filterOption = document.getElementsByClassName(".filter-option.pull-left");
-                if (filterOption) {
-                    filterOption.innerText = storedTitle;
-                    console.log(filterOption)
-                }
-                localStorage.removeItem('selectedOptionTitle'); // Xóa dữ liệu đã lưu sau khi đã sử dụng
-            }
-        });
-
-    </script>
-}
 <!-- End Shop Page -->

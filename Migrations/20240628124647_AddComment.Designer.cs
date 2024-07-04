@@ -4,6 +4,7 @@ using EcomercerWebsite_Fruit.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcomercerWebsite_Fruit.Migrations
 {
     [DbContext(typeof(EcomercerDataContext))]
-    partial class EcomercerDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240628124647_AddComment")]
+    partial class AddComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,9 +216,6 @@ namespace EcomercerWebsite_Fruit.Migrations
                     b.Property<string>("ProviderID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ReviewID")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductID");
 
@@ -711,15 +711,9 @@ namespace EcomercerWebsite_Fruit.Migrations
                     b.Property<DateTime>("DayReview")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ProductID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("ReviewID");
 
                     b.HasIndex("CustomerID");
-
-                    b.HasIndex("ProductID");
 
                     b.ToTable("reviews");
                 });
@@ -819,15 +813,7 @@ namespace EcomercerWebsite_Fruit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EcomercerWebsite_Fruit.Models.Product", "product")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("customer");
-
-                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.Bill", b =>
@@ -849,8 +835,6 @@ namespace EcomercerWebsite_Fruit.Migrations
                     b.Navigation("BillInformations");
 
                     b.Navigation("Favorites");
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("EcomercerWebsite_Fruit.Models.ProductType", b =>

@@ -23,6 +23,7 @@ namespace EcomercerWebsite_Fruit.Models
         public virtual DbSet<ProductType> productTypes { get; set; }
         public virtual DbSet<Provider> providers { get; set; }
         public virtual DbSet<StatementInformation> statementInformations { get; set; }
+        public virtual DbSet<Review> reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {

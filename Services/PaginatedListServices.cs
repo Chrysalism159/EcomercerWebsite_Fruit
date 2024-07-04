@@ -17,7 +17,7 @@
 
         public bool HasNextPage => PageIndex < TotalPages;
 
-        public static PaginatedListServices<T> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
+        public static PaginatedListServices<T> CreateAsync(List<T> source, int pageIndex, int pageSize)
         {
             var count = source.Count();
             var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
